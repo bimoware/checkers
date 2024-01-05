@@ -20,7 +20,10 @@ class Checkers {
             [0,2,0,2 ,0,2,0,2],
             [2,0,2,0 ,2,0,2,0],
             [0,2,0,2 ,0,2,0,2],
-        ]
-        
+        ].map(r => r || new Array(8).map(_ => 0))
+        this.moves = 0
+    }
+    get playersTurn(){
+        return [1,2][moves % 2]
     }
 }
