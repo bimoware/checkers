@@ -28,6 +28,10 @@ class Checkers {
             }
         }
     }
+    placePieces(){
+        // TODO: remove all pieces from every div before placing
+        // TODO: only change what's necessary
+    }
 }
 
 let game = new Checkers()
