@@ -1,6 +1,10 @@
 * {
     border:red 1px solid;
 }
+body {
+    display:flex;
+    justify-content:center;
+}
 #grid {
     margin: 2px;
     padding:2px;
