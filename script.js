@@ -8,3 +8,19 @@ for(let row in Array.from(Array(8))){
         grid.appendChild(box)
     }
 }
+
+class Checkers {
+    constructor(){
+        this.matrix = [
+            [0,1,0,1 ,0,1,0,1],
+            [1,0,1,0 ,1,0,1,0],
+            [0,1,0,1 ,0,1,0,1],
+            null,
+            null,
+            [0,2,0,2 ,0,2,0,2],
+            [2,0,2,0 ,2,0,2,0],
+            [0,2,0,2 ,0,2,0,2],
+        ]
+        
+    }
+}
