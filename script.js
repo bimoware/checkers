@@ -36,8 +36,8 @@ let baseMatrix = [
   [2, 0, 2, 0, 2, 0, 2, 0],
 ]
   .map((r) => r || new Array(8).map((_) => 0))
-  .map((r) =>
-    r.map((i, c) => ([1, 2].includes(i) ? new Piece([r, c], i) : null))
+  .map((r,rId) =>
+    r.map((p, cId) => ([1, 2].includes(p) ? new Piece([rId, cId], p) : null))
   );
 
 class Checkers {
