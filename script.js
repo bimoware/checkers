@@ -36,7 +36,7 @@ let baseMatrix = [
   [2, 0, 2, 0, 2, 0, 2, 0],
 ]
   .map((r) => r || new Array(8).map((_) => 0))
-  .map((r,rId) =>
+  .map((r, rId) =>
     r.map((p, cId) => ([1, 2].includes(p) ? new Piece([rId, cId], p) : null))
   );
 
@@ -45,8 +45,16 @@ class Checkers {
     this.matrix = baseMatrix;
     this.moves = [];
   }
-  get playersTurn() {
+  get player() {
     return [1, 2][moves.length % 2];
+  }
+  makePlayerCursorAvailable() {
+    this.forEachBox((game, [row, column]) => {
+        let piece = game.matrix[row][column]
+        if(piece){
+            if(piece.player !== game.player) piece.setAvailability(false)
+        }
+    });
   }
   startGrid() {
     let grid = document.getElementById("grid");
@@ -67,7 +75,7 @@ class Checkers {
         let elem = document.getElementById(`${row}${column}`);
         let pieceImg = document.createElement("img");
         pieceImg.src = `./${piece.color}.png`;
-        
+
         piece.setElement(pieceImg);
         elem.appendChild(pieceImg);
       }
