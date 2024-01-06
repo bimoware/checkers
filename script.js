@@ -54,7 +54,6 @@ class Checkers {
       let box = document.createElement("div");
       box.id = `${row}${column}`;
       box.className = "case color" + ((row - column) % 2 ? 2 : 1);
-      this.matrix[row][column].setElement(box);
       grid.appendChild(box);
     });
     return this;
@@ -63,12 +62,14 @@ class Checkers {
     // TODO: remove all pieces from every div before placing
     // TODO: only change what's necessary
     this.forEachBox((game, [row, column]) => {
-      let thisPosition = game.matrix[row][column];
-      if (thisPosition) {
+      let piece = game.matrix[row][column];
+      if (piece) {
         let elem = document.getElementById(`${row}${column}`);
-        let piece = document.createElement("img");
-        piece.src = "./" + ["noir", "rouge"][thisPosition - 1] + ".png";
-        elem.appendChild(piece);
+        let pieceImg = document.createElement("img");
+        pieceImg.src = `./${piece.color}.png`;
+        
+        piece.setElement(pieceImg);
+        elem.appendChild(pieceImg);
       }
     });
     return this;
