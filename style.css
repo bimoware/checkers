@@ -35,5 +35,5 @@ img {
 }
 img:hover {
     cursor:pointer;
-    transform:scaleX(-1)
+    transform:scale(0.9)
 }
