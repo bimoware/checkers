@@ -13,6 +13,7 @@ body {
   grid-template-columns: repeat(8,0fr);
 }
 .case {
+    
     width: 10vh;
     height: 10vh;
     display: flex;

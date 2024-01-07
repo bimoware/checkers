@@ -1,5 +1,8 @@
+let i = 0;
+
 class Piece {
   constructor(pos, player) {
+    this.id = i++;
     this.pos = pos; // [row, column]
     this.player = player;
   }
@@ -50,18 +53,20 @@ class Checkers {
   }
   makePlayerCursorAvailable() {
     this.forEachBox((game, [row, column]) => {
-        let piece = game.matrix[row][column]
-        if(piece){
-            if(piece.player !== game.player) piece.setAvailability(false)
-        }
+      let piece = game.matrix[row][column];
+      if (piece) {
+        if (piece.player !== game.player) piece.setAvailability(false);
+      }
     });
   }
   startGrid() {
     let grid = document.getElementById("grid");
     this.forEachBox((game, [row, column]) => {
       let box = document.createElement("div");
-      box.id = `${row}${column}`;
+      box.id = `box-${row}${column}`;
       box.className = "case color" + ((row - column) % 2 ? 2 : 1);
+      box.setAttribute("ondrop", "drop(event)");
+      box.setAttribute("ondragover", "allowDrop(event)");
       grid.appendChild(box);
     });
     return this;
@@ -72,9 +77,12 @@ class Checkers {
     this.forEachBox((game, [row, column]) => {
       let piece = game.matrix[row][column];
       if (piece) {
-        let elem = document.getElementById(`${row}${column}`);
+        let elem = document.getElementById(`box-${row}${column}`);
         let pieceImg = document.createElement("img");
         pieceImg.src = `./${piece.color}.png`;
+        pieceImg.id = `piece-${piece.id}`;
+        pieceImg.setAttribute("draggable", true);
+        pieceImg.setAttribute("ondragstart", "drag(event)");
 
         piece.setElement(pieceImg);
         elem.appendChild(pieceImg);
@@ -119,3 +127,18 @@ class Checkers {
 
 let game = new Checkers();
 game.startGrid().placePieces();
+
+function drag(ev) {
+  ev.dataTransfer.setData("text", ev.target.id);
+}
+
+function drop(ev) {
+  ev.preventDefault();
+  var data = ev.dataTransfer.getData("text");
+  ev.target.appendChild(document.getElementById(data));
+}
+
+function allowDrop(ev) {
+  console.log(ev)
+  ev.preventDefault();
+}
