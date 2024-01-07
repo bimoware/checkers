@@ -64,7 +64,7 @@ class Checkers {
     this.forEachBox((game, [row, column]) => {
       let box = document.createElement("div");
       box.id = `box-${row}${column}`;
-      box.className = "case color" + ((row - column) % 2 ? 2 : 1);
+      box.className = `case ${(row - column) % 2 ? "color" : ""}`;
       box.setAttribute("ondrop", "drop(event)");
       box.setAttribute("ondragover", "allowDrop(event)");
       grid.appendChild(box);
@@ -140,7 +140,7 @@ function drop(ev) {
 
 function allowDrop(ev) {
   let dropElem = ev.toElement;
-  if(!["color2","case"].every(c => dropElem.className.includes(c))) return;
+  if(!["color","case"].every(c => dropElem.className.includes(c))) return;
   if(dropElem.children.length) return;
   return ev.preventDefault();
 }
