@@ -139,6 +139,8 @@ function drop(ev) {
 }
 
 function allowDrop(ev) {
-  if(!ev.toElement.className.includes('color2')) return;
+  let dropElem = ev.toElement;
+  if(!["color2","case"].every(c => dropElem.className.includes(c))) return;
+  if(dropElem.children.length) return;
   return ev.preventDefault();
 }
