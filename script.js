@@ -139,6 +139,5 @@ function drop(ev) {
 }
 
 function allowDrop(ev) {
-  console.log(ev)
-  ev.preventDefault();
+  if(ev.toElement.className.includes('color2')) return ev.preventDefault();
 }
