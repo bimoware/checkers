@@ -43,18 +43,7 @@ let baseMatrix = [
     r.map((p, cId) => ([1, 2].includes(p) ? new Piece([rId, cId], p) : null))
   );
 
-
-
-
-
-
-  // ---
-
-
-
-
-
-
+// ---
 
 class Checkers {
   constructor() {
@@ -62,7 +51,7 @@ class Checkers {
     this.moves = [];
   }
   get player() {
-    return [1, 2][moves.length % 2];
+    return [1, 2][this.moves.length % 2];
   }
   makePlayerCursorAvailable() {
     this.forEachBox((game, [row, column]) => {
@@ -113,50 +102,39 @@ class Checkers {
   getBoxOf([row, column]) {
     return document.querySelector("#box-" + row + column);
   }
-  highlight(...multiplePos) {
+  get allPieces() {
+    return this.matrix.flat().filter(Boolean);
+  }
+  arePositionsEqual(pos1, pos2) {
+    return pos1.every((p, i) => p == pos2[i]);
+  }
+  showShadow(multiplePos) {
     /**
      * @type {HTMLDivElement}
      */
-    for (let [row, column] of this.matrix.flat().filter(Boolean).map(_ => _.pos)) {
-      let elem = this.getBoxOf([row, column]);
-      if(!elem) return;
-      if(multiplePos.some(p => p.every((axe,i) => axe[i] === [row,column][i]))){
-        elem.className = elem.className.replace(' highlighted','') + " highlighted";
+    this.forEachBox((game, pos) => {
+      let elem = this.getBoxOf(pos);
+      console.log({ pos, elem, multiplePos });
+      if (!elem) return;
+      if (multiplePos.some((p) => this.arePositionsEqual(p, pos))) {
+        console.log("✅✅✅✅✅✅✅✅✅ Ajouter le shadow");
+        elem.className = elem.className.replace(" shadow", "") + " shadow";
       } else {
-        if(elem.className.includes(' highlighted')) elem.className = elem.className.replace(' highlighted','');
+        console.log('----')
+        elem.className = elem.className.replace(" shadow", "");
       }
-    }
+    });
+  }
+  getMovesFor([row,column]){
+    // Temporary
+    return this.matrix[row][column].getDirections()
   }
   showMovesFor([row, column]) {
-    let piece = this.matrix[row][column];
-    if (!piece)
-      throw new Error(`No element at row ${row + 1} and column ${column + 1}`);
-    let diagonals = piece.getDirections()[0]; // Only Up
-    console.log(diagonals);
-    diagonals.forEach((d) => this.highlight(d));
-    //      let diagonals1 = Piece.prototype.getDirections.call({pos : [ row,column ]})[0] // Only Up
+    this.showShadow(this.getMovesFor([row,column]));
   }
   getPieceFor(img) {
     return this.matrix.flat().find((p) => p?.element.id === img.id);
   }
-  //   canMoveDiagonally([row, column]) {
-  //     let current = this.matrix[row][column];
-  //     let isBlack = current === 1;
-  //     let diagnals = [false, false];
-  //     let leftCoor = this.boxDiagonalTo([row,column])[isBlack ? "down": "up"]["left"]
-  //     let left = this.matrix[leftCoor[0]]?.[leftCoor[1]];
-  //     if (typeof left !== "number") diagnals = false;
-  //     else {
-  //       if (!left) diagnals[0] = true;
-  //       else if (left !== current) {
-  //         let leftCoor2 = this.boxDiagonalTo(leftCoor)[isBlack ? "down": "up"]["left"];
-  //         let left2 = this.matrix[leftCoor2[0]]?.[leftCoor2[1]]
-  //         if(left2 === 0)
-  //       }
-  //     }
-  // -- aprés jfait une boucle 2 elements -1 ** i (negatif/positif)
-  //     let right = this.matrix[row + (isBlack ? 1 : -1)]?.[column + 1];
-  //   }
 }
 
 let game = new Checkers();
