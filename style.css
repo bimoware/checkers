@@ -19,7 +19,9 @@ body {
 .color {
   background-color: rgb(27, 27, 27);
 }
-
+.highlighted  {
+  box-shadow: inset 0px 0px 10px yellow;
+}
 .notturn {
   cursor: not-allowed;
 }

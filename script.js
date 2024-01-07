@@ -12,16 +12,16 @@ class Piece {
   setElement(elem) {
     this.element = elem;
   }
-  directions() {
+  getDirections() {
     return [
       // Up [left,right]
       [
         [this.pos[0] - 1, this.pos[1] - 1],
-        [this.pos[0] + 1, this.pos[1] - 1],
+        [this.pos[0] - 1, this.pos[1] + 1],
       ],
       // Down [left,right]
       [
-        [this.pos[0] - 1, this.pos[1] + 1],
+        [this.pos[0] + 1, this.pos[1] - 1],
         [this.pos[0] + 1, this.pos[1] + 1],
       ],
     ];
@@ -42,6 +42,19 @@ let baseMatrix = [
   .map((r, rId) =>
     r.map((p, cId) => ([1, 2].includes(p) ? new Piece([rId, cId], p) : null))
   );
+
+
+
+
+
+
+  // ---
+
+
+
+
+
+
 
 class Checkers {
   constructor() {
@@ -97,13 +110,34 @@ class Checkers {
       }
     }
   }
-  movesForPiece([row, column]) {
+  getBoxOf([row, column]) {
+    return document.querySelector("#box-" + row + column);
+  }
+  highlight(...multiplePos) {
+    /**
+     * @type {HTMLDivElement}
+     */
+    for (let [row, column] of this.matrix.flat().filter(Boolean).map(_ => _.pos)) {
+      let elem = this.getBoxOf([row, column]);
+      if(!elem) return;
+      if(multiplePos.some(p => p.every((axe,i) => axe[i] === [row,column][i]))){
+        elem.className = elem.className.replace(' highlighted','') + " highlighted";
+      } else {
+        if(elem.className.includes(' highlighted')) elem.className = elem.className.replace(' highlighted','');
+      }
+    }
+  }
+  showMovesFor([row, column]) {
     let piece = this.matrix[row][column];
     if (!piece)
       throw new Error(`No element at row ${row + 1} and column ${column + 1}`);
+    let diagonals = piece.getDirections()[0]; // Only Up
+    console.log(diagonals);
+    diagonals.forEach((d) => this.highlight(d));
+    //      let diagonals1 = Piece.prototype.getDirections.call({pos : [ row,column ]})[0] // Only Up
   }
-  selectPiece([row, column]) {
-    this.selectedPiece = [row, column];
+  getPieceFor(img) {
+    return this.matrix.flat().find((p) => p?.element.id === img.id);
   }
   //   canMoveDiagonally([row, column]) {
   //     let current = this.matrix[row][column];
@@ -129,6 +163,8 @@ let game = new Checkers();
 game.startGrid().placePieces();
 
 function drag(ev) {
+  let img = ev.target;
+  game.showMovesFor(game.getPieceFor(img).pos);
   ev.dataTransfer.setData("text", ev.target.id);
 }
 
@@ -140,7 +176,7 @@ function drop(ev) {
 
 function allowDrop(ev) {
   let dropElem = ev.toElement;
-  if(!["color","case"].every(c => dropElem.className.includes(c))) return;
-  if(dropElem.children.length) return;
+  if (!["color", "case"].every((c) => dropElem.className.includes(c))) return;
+  if (dropElem.children.length) return;
   return ev.preventDefault();
 }
