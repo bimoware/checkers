@@ -1,19 +1,15 @@
-* {
-    border:red 1px solid;
-}
 body {
     display:flex;
     justify-content:center;
 }
 #grid {
+    border: black 2px solid;
     margin: 2px;
-    padding:2px;
     width: fit-content;
     display:grid;
   grid-template-columns: repeat(8,0fr);
 }
 .case {
-    
     width: 10vh;
     height: 10vh;
     display: flex;
