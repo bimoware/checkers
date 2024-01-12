@@ -5,9 +5,17 @@ class Piece {
     this.id = i++;
     this.pos = pos; // [row, column]
     this.player = player;
+    /**
+     * @type {HTMLElement}
+     */
+    this.element = null;
   }
   get color() {
     return ["black", "red"][this.player - 1];
+  }
+  setPlayer(player) {
+    this.element.src = `./${["red", "black"][player - 1]}.png`;
+    this.player = [2, 1][player - 1];
   }
   setElement(elem) {
     this.element = elem;
@@ -25,6 +33,9 @@ class Piece {
         [this.pos[0] + 1, this.pos[1] + 1],
       ],
     ];
+  }
+  delete() {
+    this.element.remove();
   }
 }
 
@@ -83,6 +94,7 @@ class Checkers {
         let pieceImg = document.createElement("img");
         pieceImg.src = `./${piece.color}.png`;
         pieceImg.id = `piece-${piece.id}`;
+        pieceImg.setAttribute("onclick", "clicked(event)");
         pieceImg.setAttribute("draggable", true);
         pieceImg.setAttribute("ondragstart", "drag(event)");
 
@@ -135,6 +147,10 @@ class Checkers {
   getPieceFor(img) {
     return this.matrix.flat().find((p) => p?.element.id === img.id);
   }
+  delete(piece) {
+    piece.delete();
+    this.matrix[piece.pos[0]][piece.pos[1]] = null;
+  }
 }
 
 let game = new Checkers();
@@ -159,3 +175,19 @@ function allowDrop(ev) {
   return ev.preventDefault();
 }
 
+function clicked(ev) {
+  let elem = ev.target
+  let piece = game.getPieceFor(ev.target);
+  if (piece) {
+    // Piece
+    let { player } = piece;
+    if (player === 1) piece.setPlayer(2);
+    if (player === 2) game.delete(piece);
+  } else {
+    // Case
+    let [row,column] = elem.id.split('-').split('').map(Number); 
+    piece = new Piece([row,column],1)
+    elem.appendChild(piece)
+    game.matrix[row][column] = piece;
+  }
+}
