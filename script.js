@@ -120,17 +120,17 @@ class Checkers {
         console.log("✅✅✅✅✅✅✅✅✅ Ajouter le shadow");
         elem.className = elem.className.replace(" shadow", "") + " shadow";
       } else {
-        console.log('----')
+        console.log("----");
         elem.className = elem.className.replace(" shadow", "");
       }
     });
   }
-  getMovesFor([row,column]){
+  getMovesFor([row, column]) {
     // Temporary
-    return this.matrix[row][column].getDirections()
+    return this.matrix[row][column].getDirections();
   }
   showMovesFor([row, column]) {
-    this.showShadow(this.getMovesFor([row,column]));
+    this.showShadow(this.getMovesFor([row, column]));
   }
   getPieceFor(img) {
     return this.matrix.flat().find((p) => p?.element.id === img.id);
@@ -158,3 +158,4 @@ function allowDrop(ev) {
   if (dropElem.children.length) return;
   return ev.preventDefault();
 }
+
